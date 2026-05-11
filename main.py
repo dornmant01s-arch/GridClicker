@@ -94,49 +94,7 @@ class GridClicker(QWidget):
         elif key == Qt.Key.Key_Escape:
             QApplication.quit()
 
-        # 뒤로 가기 (Backspace)
-        elif key == Qt.Key.Key_Backspace:
-            if self.history:
-                self.curr_x, self.curr_y, self.curr_w, self.curr_h = self.history.pop()
-                self.update()
-
-        # 클릭 (Enter 또는 Space)
-        elif key in [Qt.Key.Key_Return, Qt.Key.Key_Enter, Qt.Key.Key_Space]:
-            target_x = int(self.curr_x + (self.curr_w / 2))
-            target_y = int(self.curr_y + (self.curr_h / 2))
-            
-            self.hide()
-            if key == Qt.Key.Key_Space:
-                pyautogui.rightClick(target_x, target_y)
-            else:
-                pyautogui.click(target_x, target_y)
-            sys.exit()
-
-        # 종료 (ESC)
-        elif key == Qt.Key.Key_Escape:
-            sys.exit()
-
-        # Backspace: 뒤로 가기
-        elif event.key() == Qt.Key.Key_Backspace:
-            if self.history:
-                self.curr_x, self.curr_y, self.curr_w, self.curr_h = self.history.pop()
-                self.update()
-
-        # Enter: 왼쪽 클릭 / Space: 오른쪽 클릭
-        elif event.key() in [Qt.Key.Key_Return, Qt.Key.Key_Space]:
-            target_x = self.curr_x + (self.curr_w / 2)
-            target_y = self.curr_y + (self.curr_h / 2)
-            
-            self.hide()
-            if event.key() == Qt.Key.Key_Return:
-                pyautogui.click(target_x, target_y)
-            else:
-                pyautogui.rightClick(target_x, target_y)
-            sys.exit()
-
-        # ESC: 종료
-        elif event.key() == Qt.Key.Key_Escape:
-            sys.exit()
+     
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

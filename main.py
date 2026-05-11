@@ -46,28 +46,53 @@ class GridClicker(QWidget):
                 num = i * 3 + j + 1
                 painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, str(num))
 
-    def keyPressEvent(self, event):
-        # 숫자를 눌렀는지 확인 (숫자패드 및 상단 숫자키 모두 포함)
+   def keyPressEvent(self, event):
         key = event.key()
         
-        # Qt.Key_1 (0x31) ~ Qt.Key_9 (0x39) 범위 체크
+        # 1~9: 영역 좁히기
         if Qt.Key.Key_1 <= key <= Qt.Key.Key_9:
-            # 현재 상태 저장 (뒤로 가기용)
             self.history.append((self.curr_x, self.curr_y, self.curr_w, self.curr_h))
-            
-            # 숫자 값 추출 (Key_1은 49이므로 48을 빼면 1이 됨)
             choice = key - 48 
-            
             row = (choice - 1) // 3
             col = (choice - 1) % 3
-            
             self.curr_w /= 3
             self.curr_h /= 3
             self.curr_x += col * self.curr_w
             self.curr_y += row * self.curr_h
-            
-            print(f"선택번호: {choice}, 영역: {self.curr_x, self.curr_y}") # 디버깅용 출력
             self.update()
+
+        # Backspace: 한 단계 취소
+        elif key == Qt.Key.Key_Backspace:
+            if self.history:
+                self.curr_x, self.curr_y, self.curr_w, self.curr_h = self.history.pop()
+                self.update()
+
+        # [수정됨] Enter 또는 Space: 클릭 실행
+        elif key in [Qt.Key.Key_Return, Qt.Key.Key_Enter, Qt.Key.Key_Space]:
+            # 1. 정수 좌표 계산 (PyAutoGUI는 정수만 받음)
+            target_x = int(self.curr_x + (self.curr_w / 2))
+            target_y = int(self.curr_y + (self.curr_h / 2))
+            
+            # 2. 아주 중요: 투명 UI를 완전히 숨기고 시스템에 포커스를 넘김
+            self.hide()
+            QApplication.processEvents() # UI가 숨겨지는 걸 시스템이 인식하게 함
+            import time
+            time.sleep(0.1) # 0.1초 대기 (OS가 포커스를 돌려받는 시간)
+
+            # 3. 클릭 실행
+            if key == Qt.Key.Key_Space:
+                pyautogui.rightClick(target_x, target_y)
+                print(f"우클릭: {target_x}, {target_y}")
+            else:
+                pyautogui.click(target_x, target_y)
+                print(f"좌클릭: {target_x}, {target_y}")
+            
+            # 4. 클릭 후 프로그램 종료 (원치 않으면 주석 처리)
+            QApplication.quit()
+
+        # ESC: 종료
+        elif key == Qt.Key.Key_Escape:
+            QApplication.quit()
 
         # 뒤로 가기 (Backspace)
         elif key == Qt.Key.Key_Backspace:

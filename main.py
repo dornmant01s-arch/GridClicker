@@ -90,8 +90,8 @@ class GridClicker(QWidget):
             # 4. 클릭 후 프로그램 종료 (원치 않으면 주석 처리)
             QApplication.quit()
 
-        # ESC: 종료
-        elif key == Qt.Key.Key_Escape:
+            # ESC: 종료
+            elif key == Qt.Key.Key_Escape:
             QApplication.quit()
 
      

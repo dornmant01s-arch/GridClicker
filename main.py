@@ -53,10 +53,10 @@ class GridClicker(QWidget):
     def keyPressEvent(self, event):
         key = event.key()
         
-        # 1~9 사이의 숫자가 입력된 경우 (Key_1은 49, Key_9는 57)
+        # 1~9 사이의 숫자가 입력된 경우
         if Qt.Key.Key_1 <= key <= Qt.Key.Key_9:
             self.history.append((self.curr_x, self.curr_y, self.curr_w, self.curr_h))
-            choice = key - 48 # 숫자 값 계산
+            choice = key - 48 
             
             row = (choice - 1) // 3
             col = (choice - 1) % 3
@@ -78,9 +78,9 @@ class GridClicker(QWidget):
             target_x = int(self.curr_x + (self.curr_w / 2))
             target_y = int(self.curr_y + (self.curr_h / 2))
             
-            self.hide() # UI 숨기기
-            QApplication.processEvents() # 숨긴 걸 OS에 알림
-            time.sleep(0.1) # 0.1초 대기 (포커스 전환 시간)
+            self.hide() 
+            QApplication.processEvents() 
+            time.sleep(0.1) 
 
             if key == Qt.Key.Key_Space:
                 pyautogui.rightClick(target_x, target_y)
@@ -94,7 +94,6 @@ class GridClicker(QWidget):
             sys.exit()
 
 if __name__ == '__main__':
-    # PyAutoGUI 안전 장치 해제 (필요시)
     pyautogui.FAILSAFE = True
     app = QApplication(sys.argv)
     ex = GridClicker()

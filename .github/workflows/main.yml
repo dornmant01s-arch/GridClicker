@@ -2,20 +2,22 @@ name: Build Executable
 
 on:
   push:
-    branches: [ "main" ]  # main 브랜치에 코드가 올라올 때 실행
-  pull_request:
     branches: [ "main" ]
 
 jobs:
   build:
-    runs-on: windows-latest  # 윈도우 실행 파일을 위해 윈도우 환경에서 빌드
+    runs-on: windows-latest
+    
+    # 노드 관련 경고를 미리 해결하기 위해 환경 변수 설정 (선택 사항)
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4 # v4는 Node 20/24를 지원하므로 유지해도 무방하나 최신 유지
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5 # v4에서 v5로 업데이트
       with:
         python-version: '3.10'
 
@@ -24,14 +26,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install PyQt6 pyautogui pyinstaller
 
-    - name: Build EXE with PyInstaller
+    - name: Build EXE
       run: |
-        # --onefile: 파일 하나로 합침
-        # --noconsole: 실행 시 까만 창(터미널) 안 뜨게 함
         pyinstaller --onefile --noconsole main.py
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v4 # v4는 최신 방식이므로 유지
       with:
         name: GridClicker-Windows
         path: dist/main.exe

@@ -1,13 +1,2 @@
-# 🖱️ Recursive Grid Clicker
 
-키보드 숫자 패드만으로 화면의 정밀한 좌표를 클릭할 수 있게 해주는 프로그램입니다.
-
-## ✨ 주요 기능
-- **9분할 탐색**: 1~9번 키를 눌러 화면 영역을 재귀적으로 좁힙니다.
-- **정밀 클릭**: 원하는 위치까지 좁힌 후 `Enter`를 눌러 클릭합니다.
-- **조작 편의**: `Backspace`로 이전 영역 복구, `Space`로 우클릭이 가능합니다.
-
-## 🚀 실행 방법
-1. 필수 라이브러리 설치:
-   ```bash
-   pip install -r requirements.txt
+pip install -r requirements.txt

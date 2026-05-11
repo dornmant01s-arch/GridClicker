@@ -80,18 +80,18 @@ class GridClicker(QWidget):
             time.sleep(0.1) # 0.1초 대기 (OS가 포커스를 돌려받는 시간)
 
             # 3. 클릭 실행
-            if key == Qt.Key.Key_Space:
-                pyautogui.rightClick(target_x, target_y)
-                print(f"우클릭: {target_x}, {target_y}")
-            else:
-                pyautogui.click(target_x, target_y)
-                print(f"좌클릭: {target_x}, {target_y}")
+        if key == Qt.Key.Key_Space:
+            pyautogui.rightClick(target_x, target_y)
+            print(f"우클릭: {target_x}, {target_y}")
+        else:
+            pyautogui.click(target_x, target_y)
+            print(f"좌클릭: {target_x}, {target_y}")
             
             # 4. 클릭 후 프로그램 종료 (원치 않으면 주석 처리)
             QApplication.quit()
 
             # ESC: 종료
-            elif key == Qt.Key.Key_Escape:
+        elif key == Qt.Key.Key_Escape:
             QApplication.quit()
 
      

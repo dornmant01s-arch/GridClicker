@@ -47,14 +47,17 @@ class GridClicker(QWidget):
                 painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, str(num))
 
     def keyPressEvent(self, event):
-        key = event.text()
+        # 숫자를 눌렀는지 확인 (숫자패드 및 상단 숫자키 모두 포함)
+        key = event.key()
         
-        # 1-9 영역 선택
-        if key in "123456789":
-            # 현재 상태 저장
+        # Qt.Key_1 (0x31) ~ Qt.Key_9 (0x39) 범위 체크
+        if Qt.Key.Key_1 <= key <= Qt.Key.Key_9:
+            # 현재 상태 저장 (뒤로 가기용)
             self.history.append((self.curr_x, self.curr_y, self.curr_w, self.curr_h))
             
-            choice = int(key)
+            # 숫자 값 추출 (Key_1은 49이므로 48을 빼면 1이 됨)
+            choice = key - 48 
+            
             row = (choice - 1) // 3
             col = (choice - 1) % 3
             
@@ -62,7 +65,31 @@ class GridClicker(QWidget):
             self.curr_h /= 3
             self.curr_x += col * self.curr_w
             self.curr_y += row * self.curr_h
+            
+            print(f"선택번호: {choice}, 영역: {self.curr_x, self.curr_y}") # 디버깅용 출력
             self.update()
+
+        # 뒤로 가기 (Backspace)
+        elif key == Qt.Key.Key_Backspace:
+            if self.history:
+                self.curr_x, self.curr_y, self.curr_w, self.curr_h = self.history.pop()
+                self.update()
+
+        # 클릭 (Enter 또는 Space)
+        elif key in [Qt.Key.Key_Return, Qt.Key.Key_Enter, Qt.Key.Key_Space]:
+            target_x = int(self.curr_x + (self.curr_w / 2))
+            target_y = int(self.curr_y + (self.curr_h / 2))
+            
+            self.hide()
+            if key == Qt.Key.Key_Space:
+                pyautogui.rightClick(target_x, target_y)
+            else:
+                pyautogui.click(target_x, target_y)
+            sys.exit()
+
+        # 종료 (ESC)
+        elif key == Qt.Key.Key_Escape:
+            sys.exit()
 
         # Backspace: 뒤로 가기
         elif event.key() == Qt.Key.Key_Backspace:
